@@ -440,7 +440,7 @@ describe "Hash" do
     h1 = {:a => 1, :b => 2, :c => nil}
 
     h2 = h1.compact
-    h2.should be_a(Hash(Symbol, Int32))
+    h2.should be_a(Hash(Symbol, Int32 | Nil))
     h2.should eq({:a => 1, :b => 2})
   end
 
@@ -449,6 +449,30 @@ describe "Hash" do
 
     h2 = h1.compact!
     h2.should eq({:a => 1, :b => 2})
+    h2.should be(h1)
+  end
+
+  it "compacts when value is nil" do
+    h1 = {:c => nil}
+
+    h2 = h1.compact
+    h2.should be_a(Hash(Symbol, Nil))
+    h2.should eq({} of Symbol => Nil)
+  end
+
+  it "compacts when type is nil" do
+    h1 = {} of String => Nil
+
+    h2 = h1.compact
+    h2.should be_a(Hash(Symbol, Nil))
+    h2.should eq({} of Symbol => Nil)
+  end
+
+  it "compacts! when value is nil" do
+    h1 = {:c => nil}
+
+    h2 = h1.compact!
+    h2.should eq({} of Symbol => Nil)
     h2.should be(h1)
   end
 
